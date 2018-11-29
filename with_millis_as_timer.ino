@@ -47,10 +47,8 @@ void setup()
   Blynk.syncAll();
 }
 
-void loop()
+long GetDistance()
 {
-  Blynk.run();
-  
   //reading sensor
   long duration, distance;
   digitalWrite(TRIGGERPIN, LOW);  
@@ -65,10 +63,17 @@ void loop()
   Serial.print("value :");
   Serial.println(distance);
   Blynk.virtualWrite(V5, distance);
+  
+  return distance;
+}
+
+void loop()
+{
+  Blynk.run();
+
   delay(3500);
   
   //pump processing 
-  
   if (timerTurnedOn > 0)	//still working
   {
     //Serial.println("PUMP ON");
@@ -80,12 +85,11 @@ void loop()
         timerTurnedOn = 0;
     }   
   }				
-  else if (distance >= setlvl)    //got to check level 
+  else if (GetDistance() >= setlvl)    //got to check level 
   {
     Serial.println("PUMP ON");
     digitalWrite(relay, LOW);
     timerTurnedOn = millis();
   }
-
 
 }
