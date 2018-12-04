@@ -11,12 +11,12 @@
 
 int setlvl = 0;
 int pmptime = 0;
-//unsigned long timing;
-unsigned long timerTurnedOn = 0;
+unsigned long timerOn = 0;
 
-char auth[] = "-------------------";
-char ssid[] = "-------------------";
-char pass[] = "-------------------";
+
+char auth[] = "------------------------";
+char ssid[] = "------------------------";
+char pass[] = "------------------------";
 
 //reading widget
 BLYNK_WRITE(V2)
@@ -70,26 +70,24 @@ long GetDistance()
 void loop()
 {
   Blynk.run();
-
+  
   delay(3500);
   
   //pump processing 
-  if (timerTurnedOn > 0)	//still working
+    if (timerOn > 0)  //still working
   {
-    //Serial.println("PUMP ON");
-    //digitalWrite(relay,LOW);
-    if ((millis() - timerTurnedOn > pmptime) || (millis() < timerTurnedON) )	//got to stop
+    if ((millis() - timerOn > pmptime) || (millis() < timerOn) )  //got to stop
     {    
-	Serial.println("PUMP OFF");
-    	digitalWrite(relay,HIGH); 
-        timerTurnedOn = 0;
+  Serial.println("PUMP OFF");
+      digitalWrite(relay,HIGH); 
+        timerOn = 0;
     }   
-  }				
+  }       
   else if (GetDistance() >= setlvl)    //got to check level 
   {
     Serial.println("PUMP ON");
     digitalWrite(relay, LOW);
-    timerTurnedOn = millis();
+    timerOn = millis();
   }
-
-}
+  
+ }
